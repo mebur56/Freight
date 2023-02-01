@@ -1,6 +1,5 @@
 ﻿using Domain.Interfaces;
 using Domain.Entities;
-using Domain.Interfaces;
 using Infra.Context;
 using Infra.Repository;
 using Service.Services;
@@ -10,8 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Service.Services;
 using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.Extensions.Hosting.Internal;
+using Newtonsoft.Json;
+using DocumentFormat.OpenXml.Drawing;
 
 namespace Application
 {
@@ -36,13 +37,15 @@ namespace Application
                 var password = Configuration["database:mysql:password"];
                 string connectionString = $"Server={server};Port={port};Database={database};Uid={username};Pwd={password}";
 
-
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             });
 
-            services.AddScoped<IBaseRepository<Archive>, BaseRepository<Archive>>();
-            services.AddScoped<IBaseService<Archive>, BaseService<Archive>>();
-
+            services.AddScoped<IBaseRepository<Freight>, BaseRepository<Freight>>();
+            services.AddScoped<IBaseRepository<FreightPrice>, BaseRepository<FreightPrice>>();
+            services.AddScoped<IBaseService<Freight>, BaseService<Freight>>();
+            services.AddScoped<IBaseService<FreightPrice>, BaseService<FreightPrice>>();
+            services.AddScoped<IFreightService<Freight>, FreightService<Freight>>();
+            services.AddScoped<IFreightPriceService<FreightPrice>, FreightPriceService<FreightPrice>>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -51,6 +54,7 @@ namespace Application
             {
                 app.UseDeveloperExceptionPage();
             }
+
 
             app.UseHttpsRedirection();
 
@@ -64,4 +68,5 @@ namespace Application
             });
         }
     }
+
 }

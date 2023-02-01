@@ -1,9 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Infra.Context;
-using Domain.Entities;
-using Domain.Interfaces;
-using Infra.Context;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,6 +20,13 @@ namespace Infra.Repository
             _mySqlContext.Set<TEntity>().Add(obj);
             _mySqlContext.SaveChanges();
         }
+        public void InsertList(IList<TEntity> objs)
+        {
+            foreach(var obj in objs)
+            {
+                Insert(obj);
+            }
+        }
 
         public void Update(TEntity obj)
         {
@@ -34,6 +38,15 @@ namespace Infra.Repository
         {
             _mySqlContext.Set<TEntity>().Remove(Select(id));
             _mySqlContext.SaveChanges();
+        }
+
+        public void DeleteAll()
+        {
+            var freightTables = _mySqlContext.Set<TEntity>().ToList();
+            foreach(var freightTable in freightTables)
+            {
+                _mySqlContext.Set<TEntity>().Remove(freightTable);
+            }
         }
 
         public IList<TEntity> Select() =>

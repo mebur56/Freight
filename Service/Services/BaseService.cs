@@ -18,30 +18,24 @@ namespace Service.Services
             _baseRepository = baseRepository;
         }
 
-        public TEntity Add<TValidator>(TEntity obj) where TValidator : AbstractValidator<TEntity>
+
+        public IList<TEntity> AddList<TValidator>(IList<TEntity> obj) where TValidator : AbstractValidator<IList<TEntity>>
         {
             Validate(obj, Activator.CreateInstance<TValidator>());
-            _baseRepository.Insert(obj);
+            _baseRepository.InsertList(obj);
             return obj;
         }
+        public void CleanFreightPriceTable() => _baseRepository.DeleteAll();
 
         public void Delete(int id) => _baseRepository.Delete(id);
 
         public IList<TEntity> Get() => _baseRepository.Select();
 
-        public TEntity GetById(int id) => _baseRepository.Select(id);
 
-        public TEntity Update<TValidator>(TEntity obj) where TValidator : AbstractValidator<TEntity>
-        {
-            Validate(obj, Activator.CreateInstance<TValidator>());
-            _baseRepository.Update(obj);
-            return obj;
-        }
-
-        private void Validate(TEntity obj, AbstractValidator<TEntity> validator)
+        private void Validate(IList<TEntity> obj, AbstractValidator<IList<TEntity>> validator)
         {
             if (obj == null)
-                throw new Exception("Registros não detectados!");
+                throw new Exception("Nenhum dado encontrado");
 
             validator.ValidateAndThrow(obj);
         }

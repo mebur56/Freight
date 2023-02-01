@@ -13,19 +13,21 @@ namespace Infra.Mapping
     {
     }
 
-    public class FreteMap : IEntityTypeConfiguration<Frete>
+    public class FreightMap : IEntityTypeConfiguration<Freight>
     {
-        public void Configure(EntityTypeBuilder<Frete> builder)
+        public void Configure(EntityTypeBuilder<Freight> builder)
         {
-            builder.ToTable("Frete");
+            builder.ToTable("Freight");
 
             builder.HasKey(prop => prop.Id);
+            builder.HasIndex(prop => prop.TravelNumber).IsUnique();
 
-            builder.Property(prop => prop.Origin)
-                .HasConversion(prop => prop.ToString(), prop => prop)
-                .IsRequired()
-                .HasColumnName("Name")
-                .HasColumnType("varchar(100)");
+        }  
+        public void Configure(EntityTypeBuilder <FreightPrice> builder)
+        {
+            builder.ToTable("FreightPrice");
+
+            builder.HasKey(prop => prop.Id);
 
         }
     }

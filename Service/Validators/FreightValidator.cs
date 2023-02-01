@@ -8,15 +8,15 @@ using Domain.Entities;
 
 namespace Service.Validators
 {
-    public class ArchiveValidator : AbstractValidator<IList<Archive>>
+    public class FreightValidator : AbstractValidator<IList<Freight>>
     {
-        public ArchiveValidator()
+        public FreightValidator()
         {
             //RuleFor(c => c.Name)
             //    .NotEmpty().WithMessage("Please enter the name.")
             //    .NotNull().WithMessage("Please enter the name.");
 
-
+ 
         }
     }
 }

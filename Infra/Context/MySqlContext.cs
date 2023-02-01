@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Domain.Entities;
 using Infra.Mapping;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infra.Context
 {
@@ -14,16 +16,25 @@ namespace Infra.Context
     {
         public MySqlContext(DbContextOptions<MySqlContext> options) : base(options)
         {
-
+            try
+            {
+                var databaseCreator = (Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator);
+                databaseCreator.CreateTables();
+            }
+            catch (Exception e)
+            {
+              //ignore if table already exist
+            }
         }
 
-        public DbSet<Frete> Frete { get; set; }
+        public DbSet<Freight> Freight { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Frete>(new FreteMap().Configure);
+            modelBuilder.Entity<Freight>(new FreightMap().Configure);
+            modelBuilder.Entity<FreightPrice>(new FreightMap().Configure);
         }
     }
 }
