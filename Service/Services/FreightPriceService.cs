@@ -12,12 +12,11 @@ namespace Service.Services
     public class FreightPriceService<TEntity> : IFreightPriceService<TEntity> where TEntity : FreightPrice
     {
         private readonly IBaseRepository<TEntity> _baseRepository;
-        private readonly IBaseService<TEntity> _baseService;
+ 
 
-        public FreightPriceService(IBaseRepository<TEntity> baseRepository, IBaseService<TEntity> baseService)
+        public FreightPriceService(IBaseRepository<TEntity> baseRepository)
         {
             _baseRepository = baseRepository;
-            _baseService = baseService;
         }
 
         public FreightPrice GetFreightPrice(Archive obj)

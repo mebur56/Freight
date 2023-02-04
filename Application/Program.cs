@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Interfaces;
+using Infra.Repository;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,47 +17,24 @@ namespace Application
 {
     public class Program
     {
+
         public static void Main(string[] args)
         {
-            var host = CreateWebHost(args);
-            var baseService = host.Services.GetRequiredService<IBaseService<FreightPrice>>();
-            onApplicationStart(baseService);
+            var host = CreateHostBuilder(args).Build();
+            using (var scope = host.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<IBaseRepository<FreightPrice>>();
+                SeedFreightPrices seeder = new SeedFreightPrices();
+                seeder.Initialize(context);
+            }
             host.Run();
         }
 
-        public static IWebHost CreateWebHost(string[] args) {
-
-            return WebHost.CreateDefaultBuilder(args)
-             .UseStartup<Startup>()
-             .UseDefaultServiceProvider(options =>
-                 options.ValidateScopes = false)
-             .Build();
-        }
-
-        private static void onApplicationStart(IBaseService<FreightPrice> baseService)
-        {
-            using (StreamReader r = new StreamReader("./Assets/tabela-frete.json"))
-            {
-                string json = r.ReadToEnd();
-                dynamic freightTables = JsonConvert.DeserializeObject<Dictionary<string, Object>>(json);
-                if (freightTables != null)
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    baseService.CleanFreightPriceTable();
-                    List<FreightPrice> freightTablesList = new List<FreightPrice>();
-                    foreach (var table in freightTables)
-                    {
-                        FreightPrice freightTable = new FreightPrice();
-                        freightTable.TableName = table.Key;
-                        freightTable.Value = table.Value["value"];
-                        freightTable.VechicleType = table.Value["vehicle_type"];
-                        freightTable.Destination = table.Value["destination"];
-                        freightTable.Client = table.Value["client"];
-                        freightTablesList.Add(freightTable);
-                    }
-                    baseService.AddList<FreightPriceValidator>(freightTablesList);
-
-                }
-            }
-        }
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }
