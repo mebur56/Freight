@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Service.Validators;
+using static Service.Services.Commons.Constants;
 
 namespace Service.Services
 {
@@ -20,6 +21,21 @@ namespace Service.Services
         {
             _baseService = baseService;
             _freightPriceService = freightPriceService;
+        }
+
+        public IList<Freight> Search(string filterType, string filterText)
+        {
+            switch (filterType)
+            {
+                case FilterTypes.DRIVER:
+                    return _baseService.Get().Where(x => x.Driver.Contains(filterText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                case FilterTypes.DATE:
+                    return  _baseService.Get().Where(x => x.Date.ToString().Contains(filterText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                case FilterTypes.DESTINATION:
+                    return _baseService.Get().Where(x => x.Destination.Contains(filterText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                default:
+                    return _baseService.Get();
+            }
         }
 
         public IList<Freight> SaveFreights(DataTable dt)

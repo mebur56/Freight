@@ -20,8 +20,8 @@ namespace Application
         {
             var host = CreateWebHost(args);
             var baseService = host.Services.GetRequiredService<IBaseService<FreightPrice>>();
-            host.Run();
             onApplicationStart(baseService);
+            host.Run();
         }
 
         public static IWebHost CreateWebHost(string[] args) {

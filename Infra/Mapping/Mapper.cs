@@ -20,7 +20,6 @@ namespace Infra.Mapping
             builder.ToTable("Freight");
 
             builder.HasKey(prop => prop.Id);
-            builder.HasIndex(prop => prop.TravelNumber).IsUnique();
 
         }  
         public void Configure(EntityTypeBuilder <FreightPrice> builder)

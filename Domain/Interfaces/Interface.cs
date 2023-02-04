@@ -52,6 +52,7 @@ namespace Domain.Interfaces
     public interface IFreightService<TEntity> where TEntity : Freight
     {
         IList<Freight> SaveFreights(DataTable obj);
+        IList<Freight> Search(string filterType, string textType);
 
     }
 }

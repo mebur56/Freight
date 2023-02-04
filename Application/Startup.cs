@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.Extensions.Hosting.Internal;
 using Newtonsoft.Json;
 using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 
 namespace Application
 {
@@ -27,6 +28,13 @@ namespace Application
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors(p => p.AddPolicy("corsapp", builder =>
+            {
+                builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+            }));
+
+
             services.AddControllers();
             services.AddDbContext<MySqlContext>(options =>
             {
@@ -55,10 +63,11 @@ namespace Application
                 app.UseDeveloperExceptionPage();
             }
 
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("corsapp");
 
             app.UseAuthorization();
 

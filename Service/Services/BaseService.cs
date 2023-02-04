@@ -31,6 +31,8 @@ namespace Service.Services
 
         public IList<TEntity> Get() => _baseRepository.Select();
 
+        
+
 
         private void Validate(IList<TEntity> obj, AbstractValidator<IList<TEntity>> validator)
         {

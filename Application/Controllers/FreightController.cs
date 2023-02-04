@@ -35,7 +35,7 @@ namespace Application.Controllers
         {
             var files = HttpContext.Request.Form.Files;
             List<Archive> archives = new List<Archive>();
-            
+
             // Read File
             foreach (var file in files)
             {
@@ -49,19 +49,24 @@ namespace Application.Controllers
 
                         DataSet ds = reader.AsDataSet();
                         DataTable dt = ds.Tables[0];
-                        return  Execute(() => _freightService.SaveFreights(dt));
+                        return Execute(() => _freightService.SaveFreights(dt));
                     }
                 }
 
             }
             return default;
-            
+
         }
 
         [HttpGet]
         public async Task<IActionResult> GetList()
         {
-            return Execute(() => _baseFreightService.Get());
+
+            string filterType = HttpContext.Request.Query["filterType"];
+            string filterText = HttpContext.Request.Query["filterText"];
+
+            return Execute(() => _freightService.Search(filterType, filterText));
+
         }
 
 
