@@ -14,6 +14,7 @@ using System.IO;
 using System.Data;
 using Service.Services;
 using System.Reflection.Metadata.Ecma335;
+using System.Net;
 
 namespace Application.Controllers
 {
@@ -31,57 +32,59 @@ namespace Application.Controllers
             _freightService = freightService;
         }
         [HttpPost]
-        public async Task<IActionResult?> Create()
+        public IActionResult Create()
         {
             var files = HttpContext.Request.Form.Files;
             List<Archive> archives = new List<Archive>();
-
-            // Read File
-            foreach (var file in files)
+            if (files.Count != 1)
             {
-                if (file.Length > 0)
-                {
-                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-                    using var fileStream = file.OpenReadStream();
-                    var worksheet = new Worksheet();
-                    using (var reader = ExcelReaderFactory.CreateReader(fileStream))
-                    {
-
-                        DataSet ds = reader.AsDataSet();
-                        DataTable dt = ds.Tables[0];
-                        return Execute(() => _freightService.SaveFreights(dt));
-                    }
-                }
-
+                return BadRequest();
             }
-            return default;
+            // Read File
+            var file = files[0];
+
+            if (file.Length > 0)
+            {
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                using var fileStream = file.OpenReadStream();
+                var worksheet = new Worksheet();
+                using (var reader = ExcelReaderFactory.CreateReader(fileStream))
+                {
+
+                    DataSet ds = reader.AsDataSet();
+                    DataTable dt = ds.Tables[0];
+                    _freightService.SaveFreights(dt);
+                    return StatusCode(201);
+                }
+            }
+
+
+            return BadRequest();
 
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetList()
+        public IActionResult GetList()
         {
 
-            string filterType = HttpContext.Request.Query["filterType"];
-            string filterText = HttpContext.Request.Query["filterText"];
-
-            return Execute(() => _freightService.Search(filterType, filterText));
-
-        }
-
-
-        private IActionResult Execute(Func<object> func)
-        {
             try
             {
-                var result = func();
+                string filterType = HttpContext.Request.Query["filterType"].ToString();
+                string filterText = HttpContext.Request.Query["filterText"].ToString();
 
-                return Ok(result);
+                var freightList = _freightService.Search(filterType, filterText);
+
+                if (freightList == null || freightList.Count == 0)
+                {
+                    return NoContent();
+                }
+                return Ok(freightList);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
+
         }
     }
 }

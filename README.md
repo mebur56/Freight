@@ -1,6 +1,6 @@
 # Freights
 
-This is a sample project build on React buildin on Webpack with Typescript,
+This is a sample project build on .Net,
 
 This Project is the backend application, his counterpart is needed to be fully functional. See [Freight-Frontend](https://github.com/mebur56/Freight-Frontend)
 
