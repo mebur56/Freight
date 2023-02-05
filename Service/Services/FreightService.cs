@@ -17,7 +17,7 @@ namespace Service.Services
         private readonly IBaseService<Freight> _baseService;
         private readonly IFreightPriceService<FreightPrice> _freightPriceService;
 
-        public FreightService( IBaseService<Freight> baseService, IFreightPriceService<FreightPrice> freightPriceService)
+        public FreightService(IBaseService<Freight> baseService, IFreightPriceService<FreightPrice> freightPriceService)
         {
             _baseService = baseService;
             _freightPriceService = freightPriceService;
@@ -30,7 +30,9 @@ namespace Service.Services
                 case FilterTypes.DRIVER:
                     return _baseService.Get().Where(x => x.Driver.Contains(filterText, StringComparison.InvariantCultureIgnoreCase)).ToList();
                 case FilterTypes.DATE:
-                    return  _baseService.Get().Where(x => x.Date.ToString().Contains(filterText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                    return _baseService.Get().Where(x => x.Date.ToString().Contains(filterText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                case FilterTypes.ORIGIN:
+                    return _baseService.Get().Where(x => x.Origin.Contains(filterText, StringComparison.InvariantCultureIgnoreCase)).ToList();
                 case FilterTypes.DESTINATION:
                     return _baseService.Get().Where(x => x.Destination.Contains(filterText, StringComparison.InvariantCultureIgnoreCase)).ToList();
                 default:
@@ -45,10 +47,10 @@ namespace Service.Services
             IList<Freight> freights = GetFreights(archives);
 
             return _baseService.AddList<FreightValidator>(freights);
-           
+
         }
 
-        public List<Archive> handleDataTable (DataTable dt)
+        public List<Archive> handleDataTable(DataTable dt)
         {
             List<Archive> archives = new List<Archive>();
 

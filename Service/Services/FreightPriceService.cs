@@ -21,7 +21,7 @@ namespace Service.Services
 
         public FreightPrice GetFreightPrice(Archive obj)
         {
-            if (obj.Destination != null && obj.Destination != "")
+            if (obj.Origin == "CDD São Paulo")
             {
                 try
                 {
@@ -35,8 +35,16 @@ namespace Service.Services
             }
             else
             {
-                var entity = _baseRepository.Select().Where(x => x.Client == "CDD Ribeirão Preto" && x.VechicleType == obj.VechicleType).First();
-                return entity;
+
+                try
+                {
+                    var entity = _baseRepository.Select().Where(x => x.Client == "CDD Ribeirão Preto" && x.VechicleType == obj.VechicleType).First();
+                    return entity;
+                }
+                catch (Exception e)
+                {
+                    return default(FreightPrice);
+                }
             }
         }
 

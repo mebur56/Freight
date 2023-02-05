@@ -42,7 +42,7 @@ namespace Application
                                 Destination = table.Value["destination"]
                                 ,
                                 TableName = table.Key,
-                                Value = table.Value["vehicle_type"]
+                                Value = table.Value["value"]
                                 ,
                                 VechicleType = table.Value["vehicle_type"]
                             }

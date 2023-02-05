@@ -10,7 +10,7 @@ namespace Service.Services.Commons
     {
         public class FilterTypes
         {
-            public const string DRIVER = "DRIVER", DESTINATION = "DESTINATION", DATE = "DATE";
+            public const string DRIVER = "DRIVER", DESTINATION = "DESTINATION", DATE = "DATE", ORIGIN = "ORIGIN";
         }
     }
 }
