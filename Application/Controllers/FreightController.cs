@@ -22,13 +22,11 @@ namespace Application.Controllers
     [ApiController]
     public class FreightController : ControllerBase
     {
-        private IBaseService<Freight> _baseFreightService;
         private IFreightService<Freight> _freightService;
 
 
-        public FreightController(IBaseService<Freight> baseFreightService, IFreightService<Freight> freightService)
+        public FreightController(IFreightService<Freight> freightService)
         {
-            _baseFreightService = baseFreightService;
             _freightService = freightService;
         }
         [HttpPost]
