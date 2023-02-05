@@ -25,7 +25,6 @@ namespace Application
                     dynamic freightPrices = JsonConvert.DeserializeObject<Dictionary<string, Object>>(json);
                     if (freightPrices != null)
                     {
-                        List<FreightPrice> freightPricesList = new List<FreightPrice>();
                         foreach (var table in freightPrices)
                         {
                             FreightPrice freightPrice = new FreightPrice();
@@ -34,7 +33,6 @@ namespace Application
                             freightPrice.VechicleType = table.Value["vehicle_type"];
                             freightPrice.Destination = table.Value["destination"];
                             freightPrice.Client = table.Value["client"];
-                            freightPricesList.Add(freightPrice);
                             context.Insert(
                             new FreightPrice
                             {

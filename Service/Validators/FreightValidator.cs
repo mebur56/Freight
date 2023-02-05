@@ -12,11 +12,11 @@ namespace Service.Validators
     {
         public FreightValidator()
         {
-            //RuleFor(c => c.Name)
-            //    .NotEmpty().WithMessage("Please enter the name.")
-            //    .NotNull().WithMessage("Please enter the name.");
+            RuleFor(c => c.Count)
+                .GreaterThan(0)
+                .WithMessage("Freights list must be greater than zero");
 
- 
+
         }
     }
 }
